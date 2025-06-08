@@ -11,18 +11,19 @@ app.use(cors())
 function readUsersFile() {
     const filePath = path.join(__dirname, 'data', 'usuarios.json')
 
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            return res.status(500).json({ erro: 'Erro ao Ler o Arquivo de Usuários.' })
-        }
+    try {
+        const data = fs.readFileSync(filePath, 'utf8')
+        return JSON.parse(data)
+    
+    } catch(err) {
+        return null
+    }
 
-        res.json(JSON.parse(data))
-
-    })
 }
 
 app.get('/usuarios', (req, res) => {
-    
+    const users = readUsersFile()
+    console.log(users)
 })
 
 app.get('/dados/:id', (req, res) => {
