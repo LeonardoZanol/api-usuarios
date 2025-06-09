@@ -9,21 +9,19 @@ const port = 3000
 app.use(cors())
 
 function readUsersFile() {
-    const filePath = path.join(__dirname, 'data', 'usuarios.json')
-
-    try {
-        const data = fs.readFileSync(filePath, 'utf8')
-        return JSON.parse(data)
-    
-    } catch(err) {
-        return null
-    }
-
+    const filePath = path.join(__dirname, 'data', 'usuarios.json')   
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'))
 }
 
 app.get('/usuarios', (req, res) => {
-    const users = readUsersFile()
-    console.log(users)
+    try {
+        const usuarios = readUsersFile()
+        res.status(200).json(usuarios)
+    
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro Ao Buscar Usuários!' })
+    }
+
 })
 
 app.get('/dados/:id', (req, res) => {
