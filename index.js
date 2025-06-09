@@ -15,8 +15,15 @@ function readUsersFile() {
 
 app.get('/usuarios', (req, res) => {
     try {
-        const usuarios = readUsersFile()
-        res.status(200).json(usuarios)
+        const listUsers = readUsersFile()
+        
+        const users = listUsers.map(u => ({
+            id: u.id,
+            nome: `${u.nome} ${u.sobrenome}`,
+            email: u.email
+        }))
+
+        res.status(200).json(users)
     
     } catch (error) {
         res.status(500).json({ erro: 'Erro Ao Buscar Usuários!' })
