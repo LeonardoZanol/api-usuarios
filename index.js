@@ -16,7 +16,7 @@ function readUsersFile() {
 app.get('/usuarios', (req, res) => {
     try {
         const listUsers = readUsersFile()
-        
+
         const users = listUsers.map(u => ({
             id: u.id,
             nome: `${u.nome} ${u.sobrenome}`,
@@ -32,7 +32,19 @@ app.get('/usuarios', (req, res) => {
 })
 
 app.get('/dados/:id', (req, res) => {
+    try {
+        const listUsers = readUsersFile()
+        const user = listUsers.find(u => u.id === Number(req.params.id))
 
+        if (!user) {
+            return res.status(404).json({ erro: 'Usuário Não Encontrado!' })
+        }
+
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(500).json({ erro: 'Erro Ao Buscar Usuários!' })
+    }
 })
 
 app.listen(port, () => {
